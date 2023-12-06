@@ -22,20 +22,26 @@ fn part1(input: &str) -> String {
         .parse::<u64>()
         .unwrap();
 
-    let mut ways_to_beat = 1;
-
-    let mut n_winnable = 0;
+    let mut first_winnable = 0;
+    let mut last_winnable = u64::MAX;
 
     for hold_length in 0..time + 1 {
         let traveled = hold_length * (time - hold_length);
         if traveled > distance {
-            n_winnable += 1;
+            first_winnable = hold_length;
+            break;
         }
     }
 
-    ways_to_beat *= n_winnable;
+    for hold_length in (0..time + 1).rev() {
+        let traveled = hold_length * (time - hold_length);
+        if traveled > distance {
+            last_winnable = hold_length;
+            break;
+        }
+    }
 
-    ways_to_beat.to_string()
+    (last_winnable - first_winnable + 1).to_string()
 }
 
 #[cfg(test)]
